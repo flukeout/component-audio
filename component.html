@@ -1,83 +1,60 @@
-<polymer-element name="ceci-audio" attributes="source speed label value textcolor buttoncolor buttonactivecolor"
-  value="Click" extends="ceci-element"
-  label="Play"
-  textcolor="#ffffff"
-  buttoncolor="#4DB227"
-  buttonactivecolor="#358915"
+<polymer-element name="ceci-audio" attributes="source speed label value tapecolor"
+ extends="ceci-element"
+  label="dogs.wav"
+  source="http://soundjax.com/reddo/21812%5Edog_bark_x.mp3"
+  tapecolor="#2181cb"
   speed="1.0">
   <ceci-definition>
     {
-      "tags": ["button", "click", "tap"],
+      "tags": ["sound", "audio", "music"],
       "thumbnail": "./thumbnail.png",
-      "description": "Broadcasts a \"click\" when clicked.",
-      "name": "Audio",
-      "broadcasts": {
-        "click": {
-          "label": "Click",
-          "description": "Occurs when button is clicked."
-        }
-      },
+      "description": "Plays a sound.",
+      "name": "Audio Clip",
+      "broadcasts": {},
       "listeners": {
         "play": {
           "description": "Plays the audio clip.",
           "label": "Play",
           "default": true
-        },
-        "speed": {
-          "description": "Sets the playback rate for the audio clip.",
-          "label": "setSpeed"
         }
       },
       "attributes": {
         "source": {
-          "label": "Audio source URL.",
+          "label": "Audio source URL",
           "description": "The URL for the sound clip you want to play",
           "editable": "text",
           "listener": true
         },
         "speed": {
-          "label": "Audio playback rate.",
+          "label": "Audio playback rate",
           "description": "1 for normal speed, 2 for twice speed, -1 for reverse, etc.",
-          "editable": "number",
-          "listener": true
+          "editable": "number"
         },
         "label": {
           "label": "Label",
           "description": "Text shown on the button.",
-          "editable": "text",
-          "listener": true
+          "editable": "text"
         },
-        "value": {
+        "tapecolor": {
           "label": "Value",
-          "description": "Value sent by the button.",
-          "editable": "text",
-          "listener": true
-        },
-        "textcolor": {
-          "label": "Text Color",
-          "description": "Color of the text on the button's label.",
-          "editable": "color",
-          "listener": true
-        },
-        "buttoncolor": {
-          "label": "Button Color",
-          "description": "Background color of the button.",
-          "editable": "color",
-          "listener": true
-        },
-        "buttonactivecolor": {
-          "label": "Button Active Color",
-          "description": "Background color of the button while it is being clicked or tapped.",
-          "editable": "color",
-          "listener": true
+          "description": "Color of the tape",
+          "editable": "color"
         }
       }
     }
   </ceci-definition>
   <template>
     <link rel="stylesheet" href="component.css"></link>
-    <button id="button" on-click="{{click}}">{{label}}</button>
-    <audio id="clip" src="{{source}}" preload="preload"></audio>
+    <div id="wrapper" on-click="{{play}}" class="wrapper">
+      <div class="label">
+        <div class="text">{{label}}</div>
+      </div>
+      <div class="circles">
+        <div class="circle left"></div>
+        <div class="circle right"></div>
+      </div>
+    </div>
+    <audio id="sound" src="sounds/snare.mp3" preload="preload"></audio>
     <shadow></shadow>
   </template>
   <script>
@@ -85,46 +62,35 @@
       ready: function() {
         this.super();
         var that = this;
-        var mouseUpHandler = function(evt) {
-          window.removeEventListener("mouseup", mouseUpHandler);
-          that.$.button.style.backgroundColor = that.buttoncolor;
-        };
-        var mouseDownHandler = function(evt) {
-          window.addEventListener("mouseup", mouseUpHandler);
-          that.$.button.style.backgroundColor = that.buttonactivecolor;
-        };
-        this.$.button.addEventListener("mousedown", mouseDownHandler);
+        this.$.sound.addEventListener("ended",function(){
+          that.stopSound();
+        });
+      },
+      stopSound : function(){
+        this.$.wrapper.classList.remove("playing");
       },
       play: function() {
-        try {
-          this.$.clip.currentTime = 0;
-        }
-        catch(err){}
-        this.$.clip.play();
-      },
-      click: function() {
-        this.play();
-        this.broadcast('click', this.getAttribute('value'));
+        this.$.wrapper.classList.add("playing");
+        this.$.sound.pause();
+        this.$.sound.currentTime = 0;
+        this.$.sound.play();
       },
       sourceChanged: function(oldValue, newValue) {
-        this.$.clip.src = newValue;
+        this.$.sound.src = newValue;
       },
       setSpeed: function(channel, value) {
-        this.speedChanged(this.$.clip.playbackRate || 1, value);
+        this.speedChanged(this.$.sound.playbackRate || 1, value);
+      },
+      tapecolorChanged: function (oldValue, newValue) {
+        this.$.wrapper.style.background = newValue;
       },
       speedChanged: function(oldValue, newValue) {
         try  {
           var f = parseFloat(newValue);
           if (f) {
-            this.$.clip.playbackRate = parseFloat(newValue);
+            this.$.sound.playbackRate = parseFloat(newValue);
           }
         } catch (e) {}
-      },
-      textcolorChanged: function (oldValue, newValue) {
-        this.$.button.style.color = newValue;
-      },
-      buttoncolorChanged: function (oldValue, newValue) {
-        this.$.button.style.backgroundColor = newValue;
       }
     });
   </script>
