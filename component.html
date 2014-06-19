@@ -14,14 +14,14 @@
       "broadcasts": {
         "click": {
           "label": "Click",
-          "description": "Occurs when button is clicked.",
-          "default": true
+          "description": "Occurs when button is clicked."
         }
       },
       "listeners": {
-        "click": {
-          "description": "Causes a fake click event to occur.",
-          "label": "Click"
+        "play": {
+          "description": "Plays the audio clip.",
+          "label": "Play",
+          "default": true
         },
         "speed": {
           "description": "Sets the playback rate for the audio clip.",
@@ -77,12 +77,12 @@
   <template>
     <link rel="stylesheet" href="component.css"></link>
     <button id="button" on-click="{{click}}">{{label}}</button>
-    <audio id="clip" src="{{source}}" preload=preload></audio>
+    <audio id="clip" src="{{source}}" preload="preload"></audio>
     <shadow></shadow>
   </template>
   <script>
     Polymer('ceci-audio', {
-      ready: function () {
+      ready: function() {
         this.super();
         var that = this;
         var mouseUpHandler = function(evt) {
@@ -95,8 +95,15 @@
         };
         this.$.button.addEventListener("mousedown", mouseDownHandler);
       },
-      click: function () {
+      play: function() {
+        try {
+          this.$.clip.currentTime = 0;
+        }
+        catch(err){}
         this.$.clip.play();
+      },
+      click: function() {
+        this.play();
         this.broadcast('click', this.getAttribute('value'));
       },
       sourceChanged: function(oldValue, newValue) {
