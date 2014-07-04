@@ -1,5 +1,5 @@
 {
-	"ceci-audio": "Audio",
+	"ceci-audio": "Audio Clip",
 	"ceci-audio/description": "Broadcasts a \"click\" when clicked.",
 	"ceci-audio/attributes/label": "Play",
 	"ceci-audio/attributes/label/label": "Label",
