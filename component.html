@@ -1,6 +1,7 @@
-<polymer-element name="ceci-audio" attributes="source speed label value tapecolor"
+<polymer-element name="ceci-audio" attributes="source speed label value tapecolor volume"
  extends="ceci-element"
   label="dogs.wav"
+  volume=".5"
   source="http://soundjax.com/reddo/21812%5Edog_bark_x.mp3"
   tapecolor="#2181cb"
   speed="1.0">
@@ -24,6 +25,12 @@
           "description": "The URL for the sound clip you want to play",
           "editable": "text",
           "listener": true
+        },
+        "volume": {
+          "label": "Volume",
+          "editable": "number",
+          "min" : 0,
+          "max" : 1
         },
         "speed": {
           "label": "Audio playback rate",
@@ -54,7 +61,7 @@
         <div class="circle right"></div>
       </div>
     </div>
-    <audio id="sound" src="sounds/snare.mp3" preload="preload"></audio>
+    <audio id="sound" src="sounds/snare.mp3" preload="auto"></audio>
     <shadow></shadow>
   </template>
   <script>
@@ -80,6 +87,9 @@
       },
       setSpeed: function(channel, value) {
         this.speedChanged(this.$.sound.playbackRate || 1, value);
+      },
+      volumeChanged : function(oldValue, newValue){
+        this.$.sound.volume = newValue;
       },
       tapecolorChanged: function (oldValue, newValue) {
         this.$.wrapper.style.background = newValue;
