@@ -78,7 +78,6 @@
       },
       play: function() {
         var readyState = this.$.sound.readyState;
-
         if(readyState != 0) {
           this.$.wrapper.classList.add("playing");
           this.$.sound.pause();
@@ -89,7 +88,6 @@
           this.$.wrapper.offsetWidth = this.$.wrapper.offsetWidth;
           this.$.wrapper.classList.add("cantplay");
         }
-
       },
       sourceChanged: function(oldValue, newValue) {
         this.$.sound.src = newValue;
