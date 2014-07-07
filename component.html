@@ -77,10 +77,19 @@
         this.$.wrapper.classList.remove("playing");
       },
       play: function() {
-        this.$.wrapper.classList.add("playing");
-        this.$.sound.pause();
-        this.$.sound.currentTime = 0;
-        this.$.sound.play();
+        var readyState = this.$.sound.readyState;
+
+        if(readyState != 0) {
+          this.$.wrapper.classList.add("playing");
+          this.$.sound.pause();
+          this.$.sound.currentTime = 0;
+          this.$.sound.play();
+        } else {
+          this.$.wrapper.classList.remove("cantplay");
+          this.$.wrapper.offsetWidth = this.$.wrapper.offsetWidth;
+          this.$.wrapper.classList.add("cantplay");
+        }
+
       },
       sourceChanged: function(oldValue, newValue) {
         this.$.sound.src = newValue;

@@ -61,6 +61,25 @@
   border-radius: 100px;
 }
 
+:host .cantplay .right,
+:host .cantplay .left {
+  -webkit-animation: cantplay linear .075s 5;
+  animation: cantplay linear .075s 5;
+}
+
+@-webkit-keyframes cantplay {
+  0% { -webkit-transform: rotate(0deg);}
+  50% { -webkit-transform: rotate(15deg);}
+  100% { -webkit-transform: rotate(0deg);}
+}
+
+@keyframes cantplay {
+  0% { transform: rotate(0deg);}
+  50% { transform: rotate(15deg);}
+  100% { transform: rotate(0deg);}
+}
+
+
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg);}
   100% { -webkit-transform: rotate(360deg);}
@@ -82,6 +101,8 @@
   -webkit-animation: spin linear 1.5s infinite;
   animation: spin linear 1.5s infinite;
 }
+
+
 
 :host .right {
   right: -20px;
